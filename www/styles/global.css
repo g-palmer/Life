@@ -1,6 +1,24 @@
 body {
   color: green;
+  background-color: black;
 }
+
+.slider {
+  background-color: green;
+  width: 255px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+input[type='range'] {
+  width: 255px;
+}
+
+table {
+  border-spacing: 1px;
+  background-color: gray;
+}
+
 td {
   height: 20px;
   width: 20px;
@@ -11,13 +29,4 @@ td {
 
 .alive {
   background-color: green;
-}
-
-body {
-  background-color: black;
-}
-
-table {
-  border-spacing: 1px;
-  background-color: gray;
 }
