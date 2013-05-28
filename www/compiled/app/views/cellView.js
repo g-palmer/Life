@@ -14,13 +14,16 @@
 
     CellView.prototype.tagName = 'td';
 
-    CellView.prototype.initialize = function(params) {
+    CellView.prototype.initialize = function() {
       var _this = this;
 
+      this.r = 255;
+      this.g = Math.floor(255 / this.model.get('n') * (this.model.get('y') + 1));
+      this.b = Math.floor(255 / this.model.get('n') * (this.model.get('x') + 1));
       return this.model.on('change:alive', function() {
         if (_this.model.get('alive')) {
           return _this.$el.css({
-            'background-color': _this.model.get('color')
+            'background-color': 'rgb(' + _this.r + ', ' + _this.g + ', ' + _this.b + ')'
           });
         } else {
           return _this.$el.css({
