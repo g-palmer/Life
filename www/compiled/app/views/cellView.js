@@ -34,7 +34,12 @@
     };
 
     CellView.prototype.events = {
-      'mouseenter': function(event) {
+      'mouseenter': function() {
+        if (window.buttonState) {
+          return this.model.set('alive', !this.model.get('alive'));
+        }
+      },
+      'mousedown': function() {
         return this.model.set('alive', !this.model.get('alive'));
       }
     };

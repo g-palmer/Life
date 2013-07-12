@@ -13,14 +13,14 @@
     }
 
     Cell.prototype.initialize = function(params) {
-      this.set('n', params.n);
-      this.set('x', params.x);
-      this.set('y', params.y);
+      var b, g;
+
+      this.set(params);
       this.set('alive', false);
       this.set('willLive', false);
-      return this.on('change:alive', function() {
-        return this.trigger('stateChange', this);
-      });
+      g = Math.floor(255 / params.n * (params.y + 1));
+      b = Math.floor(255 / params.n * (params.x + 1));
+      return this.set('color', 'rgb(255, ' + g + ', ' + b + ')');
     };
 
     return Cell;

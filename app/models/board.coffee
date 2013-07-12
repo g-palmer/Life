@@ -1,13 +1,11 @@
 class window.Board extends Backbone.Model
 
-  initialize: (n = 20) ->
+  initialize: (n = 40) ->
     @set 'n', n
     @set 'aliveCells', 0
 
-    ary = _(_.range(n)).map (row, y)->
-      _(_.range(n)).map (col, x)->
-        new Cell (n: n, x: x, y: y)
-
+    # Make a 2D array of cells
+    ary = ((new Cell({n, x, y}) for x in [0...n]) for y in [0...n])
     @set 'cells', ary
 
   getCellState: (x, y) ->
@@ -34,33 +32,25 @@ class window.Board extends Backbone.Model
     count = @checkNeighbors(x ,y)
     if @getCellState(x, y)
       #cell is alive
-      if count < 2 then return false
-      else if count > 3 then return false
-      else return true
+      count is 2 or count is 3
     else
       #cell is dead
-      if count is 3 then return true
-    return false
+      count is 3
 
   step: ->
     cells = @get 'cells'
     aliveCells = 0
 
-    _(cells).each (row, y)=>
-      _(row).each (cell, x)=>
-        cell = cells[y][x]
-        if @cellWillLive(x, y)
-          cell.set 'willLive', true
-          aliveCells++
-        else
-          cell.set 'willLive', false
+    setWillLive = (cell, x, y) =>
+      cell.set 'willLive', @cellWillLive(x, y)
+      if cell.get 'willLive' then aliveCells++
 
-    _(cells).each (row, y)=>
-      _(row).each (cell, x)=>
-        cell = cells[y][x]
-        cell.set 'alive', cell.get 'willLive'
+    # set willLive on each cell (it's ugly, but it's wonderful)
+    setWillLive cell, x, y for cell, x in row for row, y in cells
 
-    if not aliveCells then @trigger 'stop'
+    # set alive from willLive on each cell
+    cell.set 'alive', cell.get 'willLive' for cell in row for row in cells
+
+    @trigger 'stop' unless aliveCells
 
     @set 'aliveCells', aliveCells
-
